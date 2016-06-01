@@ -1,0 +1,137 @@
+
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1.3in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,scrextend}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage[utf8]{inputenc}
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=blue,
+citecolor=blue, urlcolor=blue]{hyperref}
+\usepackage{lscape}
+\usepackage{listings}
+\usepackage{biblatex}
+\addbibresource{q2p2}
+
+\begin{document}
+
+
+\lhead{Delineamento e \\ Análise de Experimentos}
+\chead{Augusto Cesar Ribeiro Nunes \\ 	13/0103004}
+\rhead{31 de maio de 2016}
+ 
+% Just put your proofs in between the \begin{proof} and the \end{proof} statements!
+
+\section*{Questão 2 - Prova 2}  
+
+	\textbf{(item a)} Podemos considerar que todos os três efeitos - Analista, Termômetro e Semana - são aleatórios. Na prova respondi como se a Semana fosse um efeito fixo: imaginei o cenário onde haveria por exemplo alguma mudança de fornecedor a cada semana. Agora compreendo que o cenário de três efeitos aleatórios é mais factível.
+
+\textbf{(item b)} Os dados da Tabela indicam um Modelo de Efeitos de Tratamento com 3 fatores: Analista, Termômetro e Semana, todos os três aleatórios. Portanto, o Modelo Matemático para este experimento é 
+
+$$Y_{ijk} = \mu + \alpha_i + \beta_j + \gamma_k + (\alpha\beta)_{ij} + (\alpha\gamma)_{ik} + (\beta\gamma)_{jk} + \varepsilon_{ijk}$$
+
+com $i,j,k \in \{1,2,3\}$ e onde
+
+\begin{itemize}
+\item $\mu$ é a média geral,
+\item $\alpha_i$ é o efeito do i-ésimo analista, $\alpha_i \sim N(0, \sigma_a^2)$ iid,
+\item $\beta_j$ é o efeito da j-ésima semana, $\beta_j \sim N(0, \sigma_b^2)$ iid,
+\item $\gamma_k$ é o efeito do k-ésimo termômetro, $\gamma_k \sim N(0, \sigma_c^2)$ iid,
+\item $(\alpha\beta)_{ij}$ é a interação do i-ésimo analista com a j-ésima semana, $(\alpha\beta)_{ij} \sim N(0, \sigma_{ab}^2)$, iid,
+\item $(\alpha\gamma)_{ik}$ é a interação do i-ésimo analista com o k-ésimo termômetro $(\alpha\gamma)_{ik} \sim N(0, \sigma_{ac}^2)$, iid,
+\item $(\beta\gamma)_{jk}$ é a interação da j-ésima semana com o k-ésimo termômetro, $(\beta\gamma)_{jk} \sim N(0, \sigma_{bc}^2)$, iid,
+\item $\varepsilon$ é o erro experimental, $\varepsilon \sim N(0, \sigma_e^2)$, iid.
+\end{itemize}
+
+Note que, por suposição, a interação entre os 3 fatores é nula, então não foi sequer escrita no modelo.  \\
+
+
+
+\textbf{(item c)} 
+
+Tabela ANOVA na próxima página
+
+\begin{landscape}
+
+
+\begin{tabular}{c|cccccccp{10mm}}
+    \textbf{Fonte} & g.L. & SS & MS & MSE & $F^*$ & p-valor & Denominador  \\\hline 
+    \\
+    Analista & 2 & 2,167 & 1,0833 & $\sigma_e^2 + 3\sigma_{ac}^2 + 3\sigma_{bc}^2 + 3*3\sigma_a^2$ & 5,11 & 0,062  & 6 \\
+    Semana & 2 & 0,667 & 0,333 & $\sigma_e^2 + 3\sigma_{ab}^2 + 3\sigma_{bc}^2 + 3*3\sigma_b^2$ & 0,59 & 0,589 & 5 \\
+    Termômetro & 2 & 6,889 & 3,444 & $\sigma_e^2 + 3\sigma_{ac}^2 + 3\sigma_{bc}^2 + 3*3\sigma_c^2$ & 5,11 & 0,062 & 5 \\
+    Analista*Semana & 4 & 1,667 & 0,417 & $\sigma_e^2 + 3\sigma_{ab}^2$ & 3,16 & 0,078 & 3 \\
+    Analista*Termômetro & 4 & 2,111 & 0,528 & $\sigma_e^2 + 3\sigma_{ac}^2$ & 4,00 & 0,45 & 3 \\
+    Semana*Termômetro & 4 & 1,111 & 0,278 & $\sigma_e^2 + 3\sigma_{bc}^2$ & 2,11 & 0,171 & 3 \\
+    Erro & 8 & 1,055 & 0,132 & $\sigma_e^2$ & & & \\\hline
+    Total & 26 & 15,667 & & & & & 
+\end{tabular}
+
+
+
+\end{landscape}
+
+As três primeiras linhas da tabela ANOVA na página anterior fazem testes para a hipótese nula $\sigma_a \neq 0$ (similar para $\sigma_b$ e $\sigma_c$). Caso tivéssemos um $n > 1$ para as replicações nos fatores, bastaria considerar o denominador comum $3*3*3(n-1)$ para todos os Testes-F. Como não é o caso, utilizamos o procedimento de Satterthwaite para realizar o que a bibliografia citada neste trabalho chama de Teste pseudo-F. 
+
+Ilustrando o procedimento para testas a hipótese nula $\sigma_a^2 = 0$, temos 
+
+$$E(MS_{AB}) + E(MS_{AC}) - E(MS_E) = \sigma_e^2 + 3\sigma_{ab}^2 + 3\sigma_{ac}^2$$
+
+que, sob $H_0$, é igual a $E(MS_A)$, logo, a estatística do Teste F é 
+
+$$F^* = \frac{MS_A}{MS_{AB} + MS_{AC} - E(MS_E)} = \frac{1,083}{0,417 + 0,528 - 0,132} = 1,33$$
+
+Que tem uma distribuição F com 2 g.L. no numerador e $\nu_A$ graus de liberdade no denominador. $\nu_A$ é obtido seguindo o procedimento de Satterthwaite,
+
+$$\nu_A = \frac{(0,417 + 0,528 - 0,132)^2}{\frac{((0,417)^2}{4} + \frac{(0,528)^2}{4} + \frac{(-0,132)^2}{8}} = 6 $$
+
+\textbf{(item d)} O interesse do pesquisados nos testes de efeitos simples - como o do fator A (Analista) - é detectar variância positiva entre os diferentes analistas em relação à resposta. Para o caso de efeitos de interação - como a interação entre Semana e Termômetro (BC) - o pesquisador pode estar interessado em medir se há interação significativa, ou seja, se a variância do efeito de interação entre estes dois fatores na resposta é positiva.
+
+A Tabela ANOVA na linha 1  ilustra que o nosso Teste pseudo-F é \textbf{não-conclusivo para o efeito do Analista no Ponto de Fusão de Hidroquinona}, com nível de significância de 0,062 não temos indícios para rejeitar e nem para não rejeitar a hipótese nula $\sigma_a^2
+= 0$. Já para a interação Semana e Termômetro, a sexta linha ilustra que o Teste pseudo-F \textbf{não rejeita} a hipótese nula $\sigma_{ab}^2 = 0 $, ou seja, a interação entre Semana e Termômetro não introduz diferença estatisticamente significante na resposta. 
+
+\newpage
+\section*{Bibliografia}
+Hardeo Sahai, Mohammed I. Ageel; "The Analysis of Variance: Fixed, Random and Mixed Models",Springer Science and Business Media, 2012
+
+\section*{Código SAS}
+\textbf{Disponível em https://github.com/august-o/Q2P2-DAE}
+\begin{lstlisting}
+DATA HIDROQUINONA;
+	INPUT ANALISTA TERMOMETRO SEMANA PTFUSAO @@;
+	DATALINES;
+	1 1 1 174.0 1 1 2 173.5 1 1 3 174.5 
+	1 2 1 173.0 1 2 2 173.5 1 2 3 173.0
+	1 3 1 171.5 1 3 2 172.5 1 3 3 173.0
+	2 1 1 173.0 2 1 2 173.0 2 1 3 173.5
+	2 2 1 172.0 2 2 2 173.0 2 2 3 173.5
+	2 3 1 171.0 2 3 2 172.0 2 3 3 171.5
+	3 1 1 173.5 3 1 2 173.0 3 1 3 173.0
+	3 2 1 173.0 3 2 2 173.5 3 2 3 172.5
+	3 3 1 173.0 3 3 2 173.0 3 3 3 172.5
+	;
+	
+PROC GLM DATA = HIDROQUINONA;
+	CLASS ANALISTA TERMOMETRO SEMANA;
+	MODEL PTFUSAO = ANALISTA|TERMOMETRO|SEMANA / E2 SOLUTION;
+	LSMEANS ANALISTA SEMANA*TERMOMETRO / STDERR;
+	RUN; 
+    QUIT;
+	
+	
+PROC MIXED;
+	CLASS ANALISTA TERMOMETRO SEMANA;
+	MODEL PTFUSAO = ANALISTA TERMOMETRO SEMANA ANALISTA*TERMOMETRO
+    	ANALISTA*SEMANA TERMOMETRO*SEMANA/ e2 DDFM = SATTERTHWAITE;
+	RANDOM ANALISTA TERMOMETRO SEMANA;
+	LSMEANS ANALISTA SEMANA*TERMOMETRO;
+RUN;
+	
+PROC GENMOD DATA = HIDROQUINONA;
+	CLASS ANALISTA TERMOMETRO SEMANA;
+	MODEL PTFUSAO = ANALISTA|TERMOMETRO|SEMANA / DIST= NORMAL TYPE3;
+RUN;
+\end{lstlisting}
+
+
+\end{document}
